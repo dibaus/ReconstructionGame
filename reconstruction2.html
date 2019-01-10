@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Reconstruction Game</title>
+    <script src="graphs3.js" type="text/javascript"></script>
+    <script>
+        var game = null
+        var createPuzzle = function() {
+            clearPuzzle();
+            var power = document.getElementById("power").value;
+//            var size = document.getElementById("size").value;
+            var size = power*30
+            
+            document.getElementById("solution").style.display = "none"
+            game = new ReconstructionGameUI(new ReconstructionGame(power),size,document.getElementById("solving"),document.getElementById("hints"),document.getElementById("solution"))
+//            game.visualize(power,document.getElementById("drawDiv"))
+        }
+        var clearPuzzle = function() {
+            var d = document.getElementById("solving");
+            while( d.hasChildNodes() ){
+                d.removeChild(d.lastChild);
+            }
+            var d = document.getElementById("hints");
+            while( d.hasChildNodes() ){
+                d.removeChild(d.lastChild);
+            }
+            var d = document.getElementById("solution")
+            while( d.hasChildNodes() ){
+                d.removeChild(d.lastChild);
+            }            
+        }
+        var instrHidden = false;
+        var toggleInstructions = function() {
+            if (instrHidden) {
+                document.getElementById("instructions").style.display="block";
+                instrHidden=false;
+            }
+            else {
+                document.getElementById("instructions").style.display="none";
+                instrHidden = true;
+            }
+        }
+        var showSolution = function() {
+            document.getElementById("solution").style.display = "block"
+        }
+        var resetHints = function() {
+            game.reset();
+        }
+    </script>
+</head>
+
+<body>
+    <h1>The Reconstruction Conjecture</h1>
+    <p>Given a graph G, the graph obtained by removing a vertex v from G, deleting all incident edges and all labels is called a card of G. Formally a card is the isomorphism type of G \ v.</p>
+    <p>The deck of G is the collection of all its cards.</p>
+    <p>The Reconstruction Conjecture states that if G and H are graphs with at least 3 vertices and the deck of G and H are the same then G and H are the same (isomorphic).</p>
+    <h2>The Reconstruction Game</h2>
+    <div>
+        <button onclick=createPuzzle()>New Puzzle</button>
+<!--    <input type="number" id="size" value="200">Graph Size</input>-->
+        <button onclick=clearPuzzle()>Clear Puzzle</button>
+        <button onclick=toggleInstructions()>Hide/show Instructions</button>
+        <input type="number" id="power" value="5">Power</input>
+    </div>
+    <div id="instructions">
+        <p>You will be shown the cards of a graph and need to reconstruct the graph.</p>
+        <p>In each card, all edges incident to exactly one vertex are thin grey.
+        This unique vertex is the one which was deleted to create this card</p>
+        <p>For ease of comparison with the solution, use the first card to work out the solution.
+        To add an edge, click one vertex (it will be coloured red to indicate that it has been selected - to deselect click it again)
+        and then on a second vertex on the same graph. The edge between will be 'created'. To clear all edges, click 'Reset hints'.
+        Be aware, that the correct solution may not look identical but only isomorphic to the graph you have created.</p>
+    </div>
+    <div id="solving"></div>
+    <button onclick=resetProposedSolution()>Reset hints</button>
+    <div id="hints"></div>
+    <button onclick=showSolution()>Show Solution</button>
+    <div id="solution"></div>
+
+</body>
+</html>
